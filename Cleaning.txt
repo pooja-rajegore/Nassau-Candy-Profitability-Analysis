@@ -1,0 +1,35 @@
+import pandas as pd
+
+df= pd.read_csv("data/Raw_Nassau_Candy_Distributor.csv")
+df.head()
+
+df.info()
+
+
+df.isnull().sum()
+
+df.describe()
+
+#column Standardization
+df.columns=df.columns.str.lower()
+df.columns=df.columns.str.replace(' ','_')
+df.columns
+
+df.head()
+
+#Convert dates
+df['ship_date'] = pd.to_datetime(df['ship_date'], format='%d-%m-%Y')
+df['order_date'] = pd.to_datetime(df['order_date'])
+
+df.head()
+
+#Remove Invalid Records
+df = df[df['sales'] > 0]
+df = df[df['units'] > 0]
+
+# fill missing values
+df['units'] = df['units'].fillna(df['units'].median())
+
+
+#Save cleaned data.
+df.to_csv("data/cleaned_data.csv", index=False)
